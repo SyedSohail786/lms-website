@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
 import { format } from 'date-fns';
+import LoadingSpinner from '../LoadingSpinner';
 
 const TestResults = () => {
   const [tests, setTests] = useState([]);
@@ -20,7 +21,7 @@ const TestResults = () => {
     fetchResults();
   }, []);
 
-  if (loading) return <div>Loading results...</div>;
+  if (loading) return <LoadingSpinner/>
 
   return (
     <div className="max-w-4xl mx-auto p-6">

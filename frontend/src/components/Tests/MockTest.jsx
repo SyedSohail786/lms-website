@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
+import LoadingSpinner from '../LoadingSpinner';
 
 const MockTest = () => {
   const { subjectId } = useParams();
@@ -53,7 +54,7 @@ const MockTest = () => {
     }
   };
 
-  if (loading) return <div>Loading test...</div>;
+  if (loading) return <LoadingSpinner/>
 
   return (
     <div className="max-w-3xl mx-auto p-6">

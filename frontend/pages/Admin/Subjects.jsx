@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import SubjectList from '../../src/components/Subjects/SubjectList';
+import LoadingSpinner from '../../src/components/LoadingSpinner';
 
 const AdminSubjects = () => {
   const [courses, setCourses] = useState([]);
@@ -24,7 +25,7 @@ const AdminSubjects = () => {
     fetchCourses();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner/>
 
   return (
     <div className="max-w-4xl mx-auto">

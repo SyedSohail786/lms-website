@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
+import LoadingSpinner from '../../src/components/LoadingSpinner';
 
 const StudentSubjects = () => {
   const [subjects, setSubjects] = useState([]);
@@ -21,7 +22,7 @@ const StudentSubjects = () => {
     fetchSubjects();
   }, []);
 
-  if (loading) return <div>Loading subjects...</div>;
+  if (loading) return <LoadingSpinner/>
 
   return (
     <div className="max-w-4xl mx-auto p-6">

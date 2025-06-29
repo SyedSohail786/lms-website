@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
 import SubjectForm from './SubjectForm';
+import LoadingSpinner from '../LoadingSpinner';
 
 const SubjectList = ({ courseId }) => {
   const [subjects, setSubjects] = useState([]);
@@ -52,7 +53,7 @@ const SubjectList = ({ courseId }) => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner/>
 
   return (
     <div className="space-y-6">

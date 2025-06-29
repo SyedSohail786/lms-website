@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import api from '../../utils/api';
+import LoadingSpinner from '../../src/components/LoadingSpinner';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -35,7 +36,7 @@ const AdminDashboard = () => {
     fetchStats();
   }, []);
 
-  if (loading) return <div>Loading dashboard...</div>;
+  if (loading) return <LoadingSpinner/>
 
   return (
     <div className="max-w-6xl mx-auto">

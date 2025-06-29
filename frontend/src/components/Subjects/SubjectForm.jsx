@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
+import LoadingSpinner from '../LoadingSpinner';
 
 const SubjectForm = ({ initialData = {}, onSubmit }) => {
   const [form, setForm] = useState({
@@ -32,7 +33,7 @@ const SubjectForm = ({ initialData = {}, onSubmit }) => {
     onSubmit(form);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <LoadingSpinner/>
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">

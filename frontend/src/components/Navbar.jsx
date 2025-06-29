@@ -12,7 +12,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-purple-800 text-white px-6 py-4 flex justify-between items-center">
-      <h1 className="text-xl font-bold">LMS Portal</h1>
+      <h1 className="text-xl font-bold cursor-pointer" onClick={()=>navigate("/")}>LMS Portal</h1>
       <ul className="flex gap-6">
         {auth.status === 'guest' && (
           <>
@@ -34,8 +34,7 @@ const Navbar = () => {
 
         {auth.role === 'student' && (
           <>
-            <Link to="/student/subjects" className="hover:text-purple-300">Subjects</Link>
-            <Link to="/student/mock-test" className="hover:text-purple-300">Mock Test</Link>
+            <Link to="/student/subjects" className="hover:text-purple-300">Mock Tests</Link>
             <Link to="/student/results" className="hover:text-purple-300">Results</Link>
             <button onClick={handleLogout} className="hover:text-purple-300">Logout</button>
           </>

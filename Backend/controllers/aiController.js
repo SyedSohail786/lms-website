@@ -12,7 +12,7 @@ exports.generateQuestions = async (req, res) => {
     }
     await delay(2000); 
 const prompt = `
-Generate exactly 5 multiple-choice questions on the topic "${subject.title}".
+Generate exactly 5 multiple-choice questions on the topic "${subject.title}", it should not include same question when i ask again, every time all 5 questions should be diffent from past ones.
 Each question must follow this JSON format:
 [
   {
