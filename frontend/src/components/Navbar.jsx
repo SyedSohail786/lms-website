@@ -11,7 +11,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-purple-800 text-white px-6 py-4 flex justify-between items-center">
+    <nav className="bg-purple-800 text-white px-6 py-4 flex justify-between items-center mb-1">
       <h1 className="text-xl font-bold cursor-pointer" onClick={()=>navigate("/")}>EduExam</h1>
       <ul className="flex gap-6">
         {auth.status === 'guest' && (

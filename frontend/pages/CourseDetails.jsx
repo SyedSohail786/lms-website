@@ -134,7 +134,7 @@ const CourseDetails = () => {
                     <span className="ml-2 text-gray-500 line-through">${course.originalPrice}</span>
                   )}
                 </div>
-                <button
+                {/* <button
                   onClick={handleEnroll}
                   disabled={enrolled}
                   className={`px-6 py-3 rounded-lg font-medium ${
@@ -144,7 +144,7 @@ const CourseDetails = () => {
                   }`}
                 >
                   {enrolled ? 'Enrolled' : 'Enroll Now'}
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

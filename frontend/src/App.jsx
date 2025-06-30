@@ -20,7 +20,7 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gray-50">
           <Navbar />
-          <div className="container mx-auto py-8 px-4">
+          <div className="container mx-auto ">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/courses" element={<Courses />} />
