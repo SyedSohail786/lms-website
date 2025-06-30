@@ -1,6 +1,4 @@
 const Test = require('../models/Test');
-const Subject = require('../models/Subject');
-const Student = require('../models/Student');
 
 exports.submitTest = async (req, res) => {
   try {
@@ -36,14 +34,14 @@ exports.getTestHistory = async (req, res) => {
   }
 };
 
+
+
 exports.getAllTests = async (req, res) => {
   try {
-    const tests = await Test.find()
-      .populate('student')
-      .populate('subject')
-      .sort({ createdAt: -1 });
+    const tests = await Test.find({});
     res.json(tests);
   } catch (err) {
+    console.error("Error getting all tests:", err.message);
     res.status(500).json({ message: 'Server error' });
   }
 };

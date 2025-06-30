@@ -10,33 +10,44 @@ const AdminDashboard = () => {
     tests: 0
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const [coursesRes, subjectsRes, studentsRes, testsRes] = await Promise.all([
           api.get('/api/courses'),
-          api.get('/api/subjects/all'),
-          api.get('/api/students/all'),
-          api.get('/api/tests/all')
+          api.get('/api/subjects'),
+          api.get('/api/students'),
+          api.get('/api/tests')
         ]);
-        
+
+        // More robust response handling
         setStats({
-          courses: coursesRes.data.length,
-          subjects: subjectsRes.data.length,
-          students: studentsRes.data.length,
-          tests: testsRes.data.length
+          courses: Array.isArray(coursesRes?.data) ? coursesRes.data.length : 0,
+          subjects: Array.isArray(subjectsRes?.data) ? subjectsRes.data.length : 0,
+          students: Array.isArray(studentsRes?.data) ? studentsRes.data.length : 0,
+          tests: Array.isArray(testsRes?.data) ? testsRes.data.length : 0
         });
       } catch (err) {
-        console.error('Failed to fetch stats:', err);
+        setError('Failed to fetch statistics. Please try again later.');
+        console.error('API Error:', err.response?.data || err.message);
       } finally {
         setLoading(false);
       }
     };
+
     fetchStats();
   }, []);
 
   if (loading) return <LoadingSpinner/>
+  if (error) return (
+    <div className="max-w-6xl mx-auto p-4">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        {error}
+      </div>
+    </div>
+  );
 
   return (
     <div className="max-w-6xl mx-auto">

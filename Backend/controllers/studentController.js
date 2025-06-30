@@ -66,3 +66,13 @@ exports.getStudentSubjects = async (req, res) => {
 exports.getStudent = (req, res) => {
   res.json({ role: req.user.role, email: req.user.email });
 };
+
+exports.getAllStudents = async (req, res) => {
+  try {
+    const students = await Student.find({});
+    res.json(students);
+  } catch (err) {
+    console.error("Error getting all students:", err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

@@ -5,13 +5,15 @@ const {
   loginStudent, 
   logoutStudent, 
   getStudentSubjects,
-  getStudent
+  getStudent,
+  getAllStudents
 } = require('../controllers/studentController');
 const auth = require('../middleware/auth');
 
 router.post('/register', registerStudent);
 router.post('/login', loginStudent);
 router.get('/logout', logoutStudent);
+router.get('/', auth(['admin']), getAllStudents);
 router.get('/subjects', auth(['student']), getStudentSubjects);
 router.get('/me', auth(['student']), getStudent);
 

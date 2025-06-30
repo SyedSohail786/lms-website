@@ -44,3 +44,14 @@ exports.deleteSubject = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+// Add this to your subjectController.js
+exports.getAllSubjects = async (req, res) => {
+  try {
+    const subjects = await Subject.find({});
+    res.json(subjects); // Returns array of subjects directly
+  } catch (err) {
+    console.error("Error getting all subjects:", err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

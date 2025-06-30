@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
+import Cookies from 'js-cookie';
 
 const StudentAuth = ({ isRegister }) => {
   const [form, setForm] = useState({ 
@@ -16,10 +17,14 @@ const StudentAuth = ({ isRegister }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const token = Cookies.get("token")
     const fetchCourses = async () => {
       try {
-        const res = await api.get('/api/courses');
-        setCourses(res.data);
+        if(token){
+          const res = await api.get('/api/courses');
+          setCourses(res.data);
+        }
+        
       } catch (err) {
         console.error('Failed to fetch courses:', err);
       }

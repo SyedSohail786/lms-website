@@ -11,6 +11,7 @@ import StudentSubjects from '../pages/Student/Subjects';
 import MockTest from './components/Tests/MockTest';
 import TestResults from './components/Tests/TestResults';
 import ProtectedRoute from './components/ProtectedRoute';
+import Courses from '../pages/Courses';
 
 function App() {
   return (
@@ -21,7 +22,7 @@ function App() {
           <div className="container mx-auto py-8 px-4">
             <Routes>
               <Route path="/" element={<Home />} />
-              
+              <Route path="/courses" element={<Courses />} />
               {/* Admin Auth */}
               <Route path="/admin-login" element={<AdminAuth isRegister={false} />} />
               <Route path="/admin-register" element={<AdminAuth isRegister={true} />} />

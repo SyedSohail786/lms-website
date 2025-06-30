@@ -2,21 +2,18 @@ const Course = require('../models/Course');
 
 exports.createCourse = async (req, res) => {
   try {
-    const { title, description } = req.body;
-    const course = await Course.create({ 
-      title, 
-      description,
-      createdBy: req.user.id
-    });
-    res.json(course);
+    console.log(req.body)
+    const course = new Course(req.body);
+    await course.save();
+    res.status(201).send(course);
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    res.status(400).send({ error: err.message });
   }
 };
 
 exports.getCourses = async (req, res) => {
   try {
-    const courses = await Course.find();
+    const courses = await Course.find({});
     res.json(courses);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
