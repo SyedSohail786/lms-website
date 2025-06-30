@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FiSearch, FiFilter, FiClock, FiUser, FiStar, FiBookOpen } from 'react-icons/fi';
 import { FaChalkboardTeacher } from 'react-icons/fa';
+import api from '../utils/api'; // Import your API utility
+import { toast } from 'react-toastify';
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -13,90 +15,16 @@ const Courses = () => {
     duration: 'all'
   });
 
-  // Mock data - replace with real API calls
+  // Fetch courses from API
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Simulate API call
-        setTimeout(() => {
-          setCourses([
-            {
-              id: 1,
-              title: 'Introduction to Web Development',
-              instructor: 'Sarah Johnson',
-              category: 'Web Development',
-              level: 'Beginner',
-              duration: '8 weeks',
-              rating: 4.7,
-              students: 1250,
-              thumbnail: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-              description: 'Learn the fundamentals of HTML, CSS, and JavaScript to build your first websites.'
-            },
-            {
-              id: 2,
-              title: 'Advanced Data Science',
-              instructor: 'Michael Chen',
-              category: 'Data Science',
-              level: 'Advanced',
-              duration: '12 weeks',
-              rating: 4.9,
-              students: 890,
-              thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-              description: 'Master machine learning algorithms and data analysis techniques.'
-            },
-            {
-              id: 3,
-              title: 'Mobile App Development with React Native',
-              instructor: 'David Wilson',
-              category: 'Mobile Development',
-              level: 'Intermediate',
-              duration: '10 weeks',
-              rating: 4.5,
-              students: 1500,
-              thumbnail: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-              description: 'Build cross-platform mobile apps using React Native framework.'
-            },
-            {
-              id: 4,
-              title: 'Digital Marketing Fundamentals',
-              instructor: 'Emily Rodriguez',
-              category: 'Marketing',
-              level: 'Beginner',
-              duration: '6 weeks',
-              rating: 4.3,
-              students: 2100,
-              thumbnail: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-              description: 'Learn SEO, social media marketing, and content strategy basics.'
-            },
-            {
-              id: 5,
-              title: 'Python for Data Analysis',
-              instructor: 'Michael Chen',
-              category: 'Data Science',
-              level: 'Intermediate',
-              duration: '8 weeks',
-              rating: 4.6,
-              students: 1800,
-              thumbnail: 'https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-              description: 'Use Python libraries like Pandas and NumPy for data manipulation.'
-            },
-            {
-              id: 6,
-              title: 'UX/UI Design Principles',
-              instructor: 'Lisa Wong',
-              category: 'Design',
-              level: 'Beginner',
-              duration: '6 weeks',
-              rating: 4.8,
-              students: 950,
-              thumbnail: 'https://images.unsplash.com/photo-1541462608143-67571c6738dd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-              description: 'Master user experience and interface design fundamentals.'
-            }
-          ]);
-          setLoading(false);
-        }, 1000);
+        const { data } = await api.get('/api/courses');
+        setCourses(data);
       } catch (err) {
+        toast.error('Failed to load courses');
         console.error('Failed to fetch courses:', err);
+      } finally {
         setLoading(false);
       }
     };
@@ -112,9 +40,9 @@ const Courses = () => {
     const matchesCategory = filters.category === 'all' || course.category === filters.category;
     const matchesLevel = filters.level === 'all' || course.level === filters.level;
     const matchesDuration = filters.duration === 'all' || 
-                          (filters.duration === 'short' && parseInt(course.duration) <= 6) ||
-                          (filters.duration === 'medium' && parseInt(course.duration) > 6 && parseInt(course.duration) <= 10) ||
-                          (filters.duration === 'long' && parseInt(course.duration) > 10);
+                          (filters.duration === 'short' && parseInt(course.duration?.value) <= 6) ||
+                          (filters.duration === 'medium' && parseInt(course.duration?.value) > 6 && parseInt(course.duration?.value) <= 10) ||
+                          (filters.duration === 'long' && parseInt(course.duration?.value) > 10);
 
     return matchesSearch && matchesCategory && matchesLevel && matchesDuration;
   });
@@ -224,7 +152,7 @@ const Courses = () => {
         ) : filteredCourses.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCourses.map((course) => (
-              <CourseCard key={course.id} course={course} />
+              <CourseCard key={course._id} course={course} />
             ))}
           </div>
         ) : (
@@ -261,11 +189,13 @@ const Courses = () => {
 
 // Course Card Component
 const CourseCard = ({ course }) => {
+  const baseurl = import.meta.env.VITE_API_BASE_URL;
+  
   return (
     <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition duration-300 h-full flex flex-col">
       <div className="h-48 overflow-hidden">
         <img
-          src={course.thumbnail}
+          src={course.thumbnail ? `${baseurl}${course.thumbnail}` : 'https://via.placeholder.com/400x225'}
           alt={course.title}
           className="w-full h-full object-cover"
         />
@@ -289,7 +219,7 @@ const CourseCard = ({ course }) => {
           <FaChalkboardTeacher className="mr-1" />
           <span className="mr-4">{course.instructor}</span>
           <FiClock className="mr-1" />
-          <span>{course.duration}</span>
+          <span>{course.duration?.value} {course.duration?.unit}</span>
         </div>
         
         <div className="flex justify-between items-center mb-4">
@@ -305,7 +235,7 @@ const CourseCard = ({ course }) => {
         </div>
         
         <Link
-          to={`/courses/${course.id}`}
+          to={`/courses/${course._id}`}
           className="mt-auto block text-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-300"
         >
           View Course

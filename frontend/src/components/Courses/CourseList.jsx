@@ -27,25 +27,12 @@ const CourseList = () => {
     fetchCourses();
   }, []);
 
-  const refreshCourses = async () => {
-    try {
-      setLoading(true);
-      const { data } = await api.get('/api/courses');
-      setCourses(data);
-    } catch (err) {
-      toast.error('Failed to load courses');
-      console.error('Failed to fetch courses:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleCreate = async (formData) => {
     try {
       const { data } = await api.post('/api/courses', formData);
-      await refreshCourses(); // Refresh the list after creation
+      setCourses(prev => [data, ...prev]);
       setEditingCourse(null);
-      toast.success('Course created successfully');
+      toast.success('Course created successfully 1');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to create course');
       console.error('Failed to create course:', err);
@@ -55,7 +42,7 @@ const CourseList = () => {
   const handleUpdate = async (formData) => {
     try {
       const { data } = await api.put(`/api/courses/${editingCourse._id}`, formData);
-      await refreshCourses(); // Refresh the list after update
+      setCourses(prev => prev.map(c => c._id === data._id ? data : c));
       setEditingCourse(null);
       setExpandedCourse(null);
       toast.success('Course updated successfully');
@@ -70,7 +57,7 @@ const CourseList = () => {
     
     try {
       await api.delete(`/api/courses/${id}`);
-      setCourses(courses.filter(c => c._id !== id));
+      setCourses(prev => prev.filter(c => c._id !== id));
       toast.success('Course deleted successfully');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to delete course');
@@ -97,21 +84,19 @@ const CourseList = () => {
         </button>
       </div>
 
-      {/* Course Form (shown when editing/creating) */}
       {editingCourse && (
-  <div className="bg-white p-6 rounded-lg shadow-md">
-    <h3 className="text-xl font-semibold mb-4">
-      {editingCourse._id ? 'Edit Course' : 'Create New Course'}
-    </h3>
-    <CourseForm 
-      initialData={editingCourse} 
-      onSubmit={editingCourse._id ? handleUpdate : handleCreate}
-      onCancel={() => setEditingCourse(null)}
-      onSuccess={refreshCourses} // Add this prop
-    />
-  </div>
-)}
-      {/* Courses List */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h3 className="text-xl font-semibold mb-4">
+            {editingCourse._id ? 'Edit Course' : 'Create New Course'}
+          </h3>
+          <CourseForm 
+            initialData={editingCourse} 
+            onSubmit={editingCourse._id ? handleUpdate : handleCreate}
+            onCancel={() => setEditingCourse(null)}
+          />
+        </div>
+      )}
+
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="p-4 border-b">
           <h3 className="text-lg font-semibold">All Courses ({courses.length})</h3>

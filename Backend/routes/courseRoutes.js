@@ -4,12 +4,14 @@ const {
   createCourse, 
   getCourses, 
   updateCourse, 
-  deleteCourse 
+  deleteCourse, 
+  getSingleCourses
 } = require('../controllers/courseController');
 const auth = require('../middleware/auth');
 
 router.post('/', auth(['admin']), createCourse);
-router.get('/',auth(['admin']), getCourses);
+router.get('/', getCourses);
+router.get('/:id', getSingleCourses);
 router.put('/:id', auth(['admin']), updateCourse);
 router.delete('/:id', auth(['admin']), deleteCourse);
 

@@ -20,10 +20,7 @@ api.interceptors.response.use(
   response => response,
   error => {
     if (error.response?.status === 401) {
-      // Handle unauthorized (redirect to login)
-      if (window.location.pathname !== '/student-login') {
-        window.location.href = '/student-login';
-    }
+      
     return Promise.reject(error);
   }
 })

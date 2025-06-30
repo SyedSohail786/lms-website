@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 const baseurl = import.meta.env.VITE_API_BASE_URL;
 import Cookies from 'js-cookie';
-const CourseForm = ({ initialData = {}, onSubmit, onCancel, onSuccess }) => {
-    const navigate = useNavigate();
+
+const CourseForm = ({ initialData = {}, onSubmit, onCancel }) => {
+  const navigate = useNavigate();
   const fileInputRef = useRef(null);
   
-  // Initialize form state with default values
   const [form, setForm] = useState({
     title: initialData.title || '',
     instructor: initialData.instructor || '',
@@ -33,7 +33,6 @@ const CourseForm = ({ initialData = {}, onSubmit, onCancel, onSuccess }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
 
-  // Available categories and levels
   const categories = [
     'Web Development',
     'Data Science',
@@ -47,7 +46,6 @@ const CourseForm = ({ initialData = {}, onSubmit, onCancel, onSuccess }) => {
 
   const levels = ['Beginner', 'Intermediate', 'Advanced'];
 
-  // Handle form field changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm(prev => ({
@@ -56,40 +54,37 @@ const CourseForm = ({ initialData = {}, onSubmit, onCancel, onSuccess }) => {
     }));
   };
 
-  // Handle thumbnail file selection
   const handleThumbnailChange = async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
+    const file = e.target.files[0];
+    if (!file) return;
 
-  setIsUploading(true);
-  try {
-    const formData = new FormData();
-    formData.append('image', file);
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
 
-    // Add withCredentials if using cookies
-    const { data } = await axios.post(`${baseurl}/api/upload/image`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${Cookies.get('token')}` // If using auth
-      },
-      withCredentials: true
-    });
+      const { data } = await axios.post(`${baseurl}/api/upload/image`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${Cookies.get('token')}`
+        },
+        withCredentials: true
+      });
 
-    setForm(prev => ({
-      ...prev,
-      thumbnail: data.url,
-      thumbnailFile: file
-    }));
-    toast.success(data.message || 'Image uploaded');
-  } catch (err) {
-    toast.error(err.response?.data?.error || 'Upload failed');
-    console.error('Upload error:', err);
-  } finally {
-    setIsUploading(false);
-  }
-};
+      setForm(prev => ({
+        ...prev,
+        thumbnail: data.url,
+        thumbnailFile: file
+      }));
+      toast.success(data.message || 'Image uploaded');
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Upload failed');
+      console.error('Upload error:', err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
-  // Module and lesson management
   const handleModuleChange = (index, field, value) => {
     const updatedModules = [...form.modules];
     updatedModules[index][field] = value;
@@ -137,13 +132,11 @@ const CourseForm = ({ initialData = {}, onSubmit, onCancel, onSuccess }) => {
     setForm(prev => ({ ...prev, modules: updatedModules }));
   };
 
-  // Form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Prepare course data for submission
       const courseData = {
         title: form.title.trim(),
         instructor: form.instructor.trim(),
@@ -165,31 +158,17 @@ const CourseForm = ({ initialData = {}, onSubmit, onCancel, onSuccess }) => {
         }))
       };
 
-      // Validate required fields
       if (!courseData.title || !courseData.description || !courseData.thumbnail) {
         throw new Error('Please fill all required fields');
       }
 
-      // Make API request
-      const url = initialData._id 
-        ? `${baseurl}/api/courses/${initialData._id}`
-        : `${baseurl}/api/courses`;
-      const method = initialData._id ? 'put' : 'post';
-
-      await axios[method](url, courseData, {
-        headers: {
-          'Authorization': `Bearer ${Cookies.get('token')}`
-        },
-        withCredentials: true
-      });
-
+      await onSubmit(courseData);
       toast.success(`Course ${initialData._id ? 'updated' : 'created'} successfully`);
-      onSuccess?.(); // Call the success callback
-      if (typeof onSubmit === 'function') {
-        onSubmit(courseData); // Also call the original onSubmit if needed
-      }
+      onCancel?.();
     } catch (err) {
-      // ... error handling ...
+      const errorMessage = err.response?.data?.error || err.message || 'Failed to save course';
+      toast.error(errorMessage);
+      console.error(err);
     } finally {
       setIsSubmitting(false);
     }
