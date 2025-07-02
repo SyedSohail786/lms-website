@@ -35,7 +35,8 @@ const Navbar = () => {
       { to: "/admin/dashboard", text: "Dashboard" },
       { to: "/admin/courses", text: "Courses" },
       { to: "/admin/subjects", text: "Subjects" },
-      { to: "/admin/students", text: "Students" }
+      { to: "/admin/students", text: "Students" },
+      { to: "/admin/enrolled", text: "Enrolled" }
     ],
     student: [
       { to: "/courses", text: "Courses" },

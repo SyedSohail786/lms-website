@@ -55,3 +55,81 @@ exports.getEnrollmentStatus = async (req, res) => {
 
   return res.json({ enrolled: false });
 }
+
+
+// Get all enrolled students with pagination and search
+exports.getAllEnrolledStudents = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, search = '' } = req.query;
+    
+    const query = {};
+    if (search) {
+      query.$or = [
+        { studentName: { $regex: search, $options: 'i' } },
+        { studentEmail: { $regex: search, $options: 'i' } },
+        { courseTitle: { $regex: search, $options: 'i' } },
+        { courseCategory: { $regex: search, $options: 'i' } }
+      ];
+    }
+
+    const enrolledStudents = await EnrolledStudent.find(query)
+      .sort({ enrolledAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+      .populate('studentId', 'name email')
+      .populate('course', 'title thumbnail');
+
+    const count = await EnrolledStudent.countDocuments(query);
+
+    res.json({
+      enrolledStudents,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+      totalEnrollments: count
+    });
+  } catch (error) {
+    console.error('Error fetching enrolled students:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Get enrollment statistics
+exports.getEnrollmentStats = async (req, res) => {
+  try {
+    const totalEnrollments = await EnrolledStudent.countDocuments();
+    const enrollmentsByCategory = await EnrolledStudent.aggregate([
+      { $group: { _id: '$courseCategory', count: { $sum: 1 } } },
+      { $sort: { count: -1 } }
+    ]);
+    const recentEnrollments = await EnrolledStudent.find()
+      .sort({ enrolledAt: -1 })
+      .limit(5)
+      .populate('course', 'title');
+
+    res.json({
+      totalEnrollments,
+      enrollmentsByCategory,
+      recentEnrollments
+    });
+  } catch (error) {
+    console.error('Error fetching enrollment stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Remove enrollment
+exports.removeEnrollment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const enrollment = await EnrolledStudent.findByIdAndDelete(id);
+    
+    if (!enrollment) {
+      return res.status(404).json({ message: 'Enrollment not found' });
+    }
+    
+    res.json({ message: 'Enrollment removed successfully' });
+  } catch (error) {
+    console.error('Error removing enrollment:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

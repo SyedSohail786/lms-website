@@ -14,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Courses from '../pages/Courses';
 import CourseDetails from '../pages/CourseDetails';
 import Students from '../pages/Admin/Students';
+import Enrolled from './components/Enrolled';
 
 function App() {
   return (
@@ -57,6 +58,11 @@ function App() {
               <Route path="/admin/students" element={
                 <ProtectedRoute allowedRoles={['admin']}>
                   <Students />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/enrolled" element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <Enrolled />
                 </ProtectedRoute>
               } />
               
