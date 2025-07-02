@@ -13,18 +13,23 @@ import TestResults from './components/Tests/TestResults';
 import ProtectedRoute from './components/ProtectedRoute';
 import Courses from '../pages/Courses';
 import CourseDetails from '../pages/CourseDetails';
+import Students from '../pages/Admin/Students';
 
 function App() {
   return (
     <AuthProvider>
       <Router>
         <div className="min-h-screen bg-gray-50">
+          {/* Navbar is fixed at the top with z-index */}
           <Navbar />
-          <div className="container mx-auto ">
+          
+          {/* Main content with responsive padding to account for navbar height */}
+          <div className="pt-16 sm:pt-20 container mx-auto px-4 sm:px-6 md:px-8 max-w-7xl">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/courses" element={<Courses />} />
               <Route path="/courses/:id" element={<CourseDetails />} />
+              
               {/* Admin Auth */}
               <Route path="/admin-login" element={<AdminAuth isRegister={false} />} />
               <Route path="/admin-register" element={<AdminAuth isRegister={true} />} />
@@ -47,6 +52,11 @@ function App() {
               <Route path="/admin/subjects" element={
                 <ProtectedRoute allowedRoles={['admin']}>
                   <AdminSubjects />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin/students" element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <Students />
                 </ProtectedRoute>
               } />
               

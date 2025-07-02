@@ -66,3 +66,26 @@ exports.getStudentSubjects = async (req, res) => {
 exports.getStudent = (req, res) => {
   res.json({ role: req.user.role, email: req.user.email });
 };
+
+exports.getAllStudents = async (req, res) => {
+  try {
+    const students = await Student.find().populate('course').select('-password');
+    res.json(students);
+  } catch (err) {
+    console.error("Error in getAllStudents:", err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.deleteStudentById = async (req, res) => {
+  try {
+    const student = await Student.findByIdAndDelete(req.params.id);
+    if (!student) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+    res.json({ success: true, message: 'Student deleted successfully' });
+  } catch (err) {
+    console.error('Delete error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

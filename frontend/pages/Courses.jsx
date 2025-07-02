@@ -4,6 +4,7 @@ import { FiSearch, FiFilter, FiClock, FiUser, FiStar, FiBookOpen } from 'react-i
 import { FaChalkboardTeacher } from 'react-icons/fa';
 import api from '../utils/api'; // Import your API utility
 import { toast } from 'react-toastify';
+import Select from 'react-select'; // Import react-select
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -49,6 +50,28 @@ const Courses = () => {
 
   // Extract unique categories for filter dropdown
   const categories = ['all', ...new Set(courses.map(course => course.category))];
+  const categoryOptions = categories.map(category => ({
+    value: category,
+    label: category === 'all' ? 'All Categories' : category
+  }));
+
+  const levelOptions = [
+    { value: 'all', label: 'All Levels' },
+    { value: 'Beginner', label: 'Beginner' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced', label: 'Advanced' }
+  ];
+
+  const durationOptions = [
+    { value: 'all', label: 'Any Duration' },
+    { value: 'short', label: 'Short (≤6 weeks)' },
+    { value: 'medium', label: 'Medium (7-10 weeks)' },
+    { value: 'long', label: 'Long (>10 weeks)' }
+  ];
+
+  const handleFilterChange = (field) => (selectedOption) => {
+    setFilters({ ...filters, [field]: selectedOption.value });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -80,53 +103,154 @@ const Courses = () => {
 
             {/* Filter Dropdowns */}
             <div className="flex flex-col sm:flex-row gap-2">
-              <div className="relative">
-                <select
-                  className="appearance-none block w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={filters.category}
-                  onChange={(e) => setFilters({...filters, category: e.target.value})}
-                >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category === 'all' ? 'All Categories' : category}
-                    </option>
-                  ))}
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                  <FiFilter className="text-gray-400" />
-                </div>
+              <div className="relative w-full sm:w-auto">
+                <Select
+                  options={categoryOptions}
+                  value={categoryOptions.find(option => option.value === filters.category)}
+                  onChange={handleFilterChange('category')}
+                  className="w-full text-sm sm:text-base"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      padding: '0.375rem 0', // Matches py-2
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      boxShadow: 'none',
+                      '&:hover': { borderColor: '#e5e7eb' },
+                      '&:focus-within': {
+                        borderColor: '#3b82f6',
+                        boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.2)',
+                      },
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      marginTop: '0',
+                      borderRadius: '0.5rem',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      fontSize: '0.875rem', // text-sm
+                      padding: '0.375rem 0.75rem', // py-1.5 px-3
+                      backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : 'white',
+                      color: state.isSelected ? 'white' : 'black',
+                      '&:hover': { backgroundColor: '#eff6ff' },
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      marginLeft: '0.5rem', // Slight offset to align with design
+                    }),
+                  }}
+                  components={{
+                    IndicatorSeparator: () => null,
+                    DropdownIndicator: () => (
+                      <div className="pr-2">
+                        <FiFilter className="text-gray-400 w-4 h-4" />
+                      </div>
+                    ),
+                  }}
+                />
               </div>
 
-              <div className="relative">
-                <select
-                  className="appearance-none block w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={filters.level}
-                  onChange={(e) => setFilters({...filters, level: e.target.value})}
-                >
-                  <option value="all">All Levels</option>
-                  <option value="Beginner">Beginner</option>
-                  <option value="Intermediate">Intermediate</option>
-                  <option value="Advanced">Advanced</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                  <FiFilter className="text-gray-400" />
-                </div>
+              <div className="relative w-full sm:w-auto">
+                <Select
+                  options={levelOptions}
+                  value={levelOptions.find(option => option.value === filters.level)}
+                  onChange={handleFilterChange('level')}
+                  className="w-full text-sm sm:text-base"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      padding: '0.375rem 0', // Matches py-2
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      boxShadow: 'none',
+                      '&:hover': { borderColor: '#e5e7eb' },
+                      '&:focus-within': {
+                        borderColor: '#3b82f6',
+                        boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.2)',
+                      },
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      marginTop: '0',
+                      borderRadius: '0.5rem',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      fontSize: '0.875rem', // text-sm
+                      padding: '0.375rem 0.75rem', // py-1.5 px-3
+                      backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : 'white',
+                      color: state.isSelected ? 'white' : 'black',
+                      '&:hover': { backgroundColor: '#eff6ff' },
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      marginLeft: '0.5rem', // Slight offset to align with design
+                    }),
+                  }}
+                  components={{
+                    IndicatorSeparator: () => null,
+                    DropdownIndicator: () => (
+                      <div className="pr-2">
+                        <FiFilter className="text-gray-400 w-4 h-4" />
+                      </div>
+                    ),
+                  }}
+                />
               </div>
 
-              <div className="relative">
-                <select
-                  className="appearance-none block w-full pl-3 pr-8 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                  value={filters.duration}
-                  onChange={(e) => setFilters({...filters, duration: e.target.value})}
-                >
-                  <option value="all">Any Duration</option>
-                  <option value="short">Short (≤6 weeks)</option>
-                  <option value="medium">Medium (7-10 weeks)</option>
-                  <option value="long">Long (10 weeks)</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                  <FiClock className="text-gray-400" />
-                </div>
+              <div className="relative w-full sm:w-auto">
+                <Select
+                  options={durationOptions}
+                  value={durationOptions.find(option => option.value === filters.duration)}
+                  onChange={handleFilterChange('duration')}
+                  className="w-full text-sm sm:text-base"
+                  classNamePrefix="react-select"
+                  styles={{
+                    control: (provided) => ({
+                      ...provided,
+                      padding: '0.375rem 0', // Matches py-2
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      boxShadow: 'none',
+                      '&:hover': { borderColor: '#e5e7eb' },
+                      '&:focus-within': {
+                        borderColor: '#3b82f6',
+                        boxShadow: '0 0 0 2px rgba(59, 130, 246, 0.2)',
+                      },
+                    }),
+                    menu: (provided) => ({
+                      ...provided,
+                      marginTop: '0',
+                      borderRadius: '0.5rem',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06)',
+                    }),
+                    option: (provided, state) => ({
+                      ...provided,
+                      fontSize: '0.875rem', // text-sm
+                      padding: '0.375rem 0.75rem', // py-1.5 px-3
+                      backgroundColor: state.isSelected ? '#3b82f6' : state.isFocused ? '#eff6ff' : 'white',
+                      color: state.isSelected ? 'white' : 'black',
+                      '&:hover': { backgroundColor: '#eff6ff' },
+                    }),
+                    singleValue: (provided) => ({
+                      ...provided,
+                      marginLeft: '0.5rem', // Slight offset to align with design
+                    }),
+                  }}
+                  components={{
+                    IndicatorSeparator: () => null,
+                    DropdownIndicator: () => (
+                      <div className="pr-2">
+                        <FiClock className="text-gray-400 w-4 h-4" />
+                      </div>
+                    ),
+                  }}
+                />
               </div>
             </div>
           </div>

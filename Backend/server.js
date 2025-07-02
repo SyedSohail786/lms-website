@@ -5,6 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 const app = express();
+
 // Middleware
 app.use(cors({
   origin: process.env.FRONTEND_URL,
@@ -19,14 +20,15 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/uploads', express.static('public/uploads'));
+
 // Database connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('Connected to MongoDB'))
   .catch(err => console.error('MongoDB connection error:', err));
+  
 // Routes
-
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/courses', require('./routes/courseRoutes'));

@@ -1,11 +1,13 @@
+// SubjectForm.js
 import { useState, useEffect } from 'react';
 import api from '../../../utils/api';
 import LoadingSpinner from '../LoadingSpinner';
+import { motion } from 'framer-motion';
 
-const SubjectForm = ({ initialData = {}, onSubmit }) => {
+const SubjectForm = ({ initialData = {}, onSubmit, onCancel }) => {
   const [form, setForm] = useState({
     title: initialData.title || '',
-    course: initialData.course?._id || ''
+    course: initialData.course?._id || initialData.course || ''
   });
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,6 +26,15 @@ const SubjectForm = ({ initialData = {}, onSubmit }) => {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    if (initialData) {
+      setForm({
+        title: initialData.title || '',
+        course: initialData.course?._id || initialData.course || ''
+      });
+    }
+  }, [initialData]);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -33,29 +44,34 @@ const SubjectForm = ({ initialData = {}, onSubmit }) => {
     onSubmit(form);
   };
 
-  if (loading) return <LoadingSpinner/>
+  if (loading) return <LoadingSpinner />;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <label className="block text-gray-700 mb-1">Title</label>
+    <motion.form
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      onSubmit={handleSubmit}
+      className="space-y-6"
+    >
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">Title</label>
         <input
           type="text"
           name="title"
           value={form.title}
           onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           required
         />
       </div>
       
-      <div>
-        <label className="block text-gray-700 mb-1">Course</label>
+      <div className="space-y-2">
+        <label className="block text-sm font-medium text-gray-700">Course</label>
         <select
           name="course"
           value={form.course}
           onChange={handleChange}
-          className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-purple-600"
+          className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
           required
         >
           <option value="">Select Course</option>
@@ -67,13 +83,29 @@ const SubjectForm = ({ initialData = {}, onSubmit }) => {
         </select>
       </div>
       
-      <button
-        type="submit"
-        className="bg-purple-700 text-white px-4 py-2 rounded hover:bg-purple-800 transition"
-      >
-        {initialData._id ? 'Update' : 'Create'}
-      </button>
-    </form>
+      <div className="flex gap-3">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          type="submit"
+          className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+        >
+          {initialData._id ? 'Update Subject' : 'Create Subject'}
+        </motion.button>
+        
+        {initialData._id && (
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            type="button"
+            onClick={onCancel}
+            className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+          >
+            Cancel
+          </motion.button>
+        )}
+      </div>
+    </motion.form>
   );
 };
 
