@@ -17,7 +17,7 @@ const CourseDetails = () => {
   const [relatedCourses, setRelatedCourses] = useState([]);
   const [enrolled, setEnrolled] = useState(false);
   const baseurl = import.meta.env.VITE_API_BASE_URL;
-
+  const [enrolling, setEnrolling] = useState(false);
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -50,6 +50,7 @@ const CourseDetails = () => {
 
   const handleEnroll = async () => {
     try {
+      setEnrolling(true);
     const token = await Cookies.get('sToken');
 
       console.log(token)
@@ -61,6 +62,7 @@ const CourseDetails = () => {
       }
       await api.post(`/api/enroll/${id}`);
       toast.success('Successfully enrolled in the course!');
+      setEnrolling(false);
       setEnrolled(true);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to enroll');
@@ -170,7 +172,7 @@ const CourseDetails = () => {
                     enrolled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
                   } transition duration-200`}
                 >
-                  {enrolled ? 'Enrolled' : 'Enroll Now'}
+                  {enrolled ? 'Enrolled' : enrolling? 'Enrolling...' : 'Enroll Now'}
                 </motion.button>
               </div>
             </div>
