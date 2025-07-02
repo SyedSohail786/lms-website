@@ -7,6 +7,7 @@ import api from '../utils/api';
 import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import LoadingSpinner from '../src/components/LoadingSpinner';
+import Cookies from 'js-cookie';
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -30,8 +31,8 @@ const CourseDetails = () => {
 
         // Check if user is enrolled
         try {
-          const enrollmentRes = await api.get(`/api/courses/${id}/enrollment`);
-          setEnrolled(enrollmentRes.data.enrolled);
+          const res = await api.get(`/api/status/${id}`);
+          if (res.data.enrolled) return setEnrolled(true);
         } catch {
           setEnrolled(false);
         }
@@ -49,14 +50,22 @@ const CourseDetails = () => {
 
   const handleEnroll = async () => {
     try {
-      await api.post(`/api/courses/${id}/enroll`);
+    const token = await Cookies.get('sToken');
+
+      console.log(token)
+      
+      if(!token) {
+        toast.error('You must be logged in to enroll')
+        navigate('/student-login')
+        return
+      }
+      await api.post(`/api/enroll/${id}`);
       toast.success('Successfully enrolled in the course!');
       setEnrolled(true);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to enroll');
     }
   };
-
   if (loading) return <LoadingSpinner />;
   if (!course) return <div className="text-center py-12 text-base sm:text-lg">Course not found</div>;
 
@@ -143,6 +152,27 @@ const CourseDetails = () => {
                 </div>
               </div>
 
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+                <div>
+                  <span className="text-lg sm:text-2xl font-bold">${course.price}</span>
+                  {course.originalPrice && (
+                    <span className="ml-2 text-gray-500 line-through text-sm sm:text-base">
+                      ${course.originalPrice}
+                    </span>
+                  )}
+                </div>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleEnroll}
+                  disabled={enrolled}
+                  className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold text-white ${
+                    enrolled ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+                  } transition duration-200`}
+                >
+                  {enrolled ? 'Enrolled' : 'Enroll Now'}
+                </motion.button>
+              </div>
             </div>
           </div>
 

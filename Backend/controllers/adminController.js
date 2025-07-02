@@ -14,8 +14,8 @@ exports.register = async (req, res) => {
     const admin = await Admin.create({ name, email, password });
     const token = generateToken(admin._id, 'admin');
 
-    res.cookie('token', token, { 
-      httpOnly: true,
+    res.cookie('aToken', token, { 
+      // httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000 // 1 day
@@ -36,8 +36,8 @@ exports.login = async (req, res) => {
 
     const token = generateToken(admin._id, 'admin');
 
-    res.cookie('token', token, { 
-      httpOnly: true,
+    res.cookie('aToken', token, { 
+      // httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000 // 1 day
@@ -48,7 +48,7 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  res.clearCookie('token').json({ message: 'Logged out' });
+  res.clearCookie('aToken').json({ message: 'Logged out' });
 };
 
 exports.getAdmin = (req, res) => {

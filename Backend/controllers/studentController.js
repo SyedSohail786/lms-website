@@ -15,8 +15,8 @@ exports.registerStudent = async (req, res) => {
     const student = await Student.create({ name, email, password, course });
     const token = generateToken(student._id, 'student');
 
-    res.cookie('token', token, { 
-      httpOnly: true,
+    res.cookie('sToken', token, { 
+      // httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000 // 1 day
@@ -37,8 +37,8 @@ exports.loginStudent = async (req, res) => {
 
     const token = generateToken(student._id, 'student');
 
-    res.cookie('token', token, { 
-      httpOnly: true,
+    res.cookie('sToken', token, { 
+      // httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000 // 1 day
@@ -49,7 +49,7 @@ exports.loginStudent = async (req, res) => {
 };
 
 exports.logoutStudent = (req, res) => {
-  res.clearCookie('token').json({ message: 'Logged out' });
+  res.clearCookie('sToken').json({ message: 'Logged out' });
 };
 
 exports.getStudentSubjects = async (req, res) => {

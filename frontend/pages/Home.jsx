@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaChalkboardTeacher, FaBook, FaUserGraduate, FaChartLine, FaMobileAlt, FaCertificate } from 'react-icons/fa';
 import { FiArrowRight } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import Cookies from 'js-cookie';
 
 const LandingPage = () => {
   const [stats, setStats] = useState({
@@ -38,9 +39,10 @@ const LandingPage = () => {
           <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 max-w-xl sm:max-w-2xl mx-auto">
             Our LMS platform provides everything you need to teach, learn, and grow in today's digital world.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
+          
+              <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <Link
-              to="/student-register"
+              to={`/student-register`}
               className="bg-white text-blue-600 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-50 transition duration-300 flex items-center justify-center"
             >
               Get Started <FiArrowRight className="ml-2" />
@@ -52,6 +54,8 @@ const LandingPage = () => {
               Login
             </Link>
           </div>
+            
+          
         </motion.div>
       </section>
 
