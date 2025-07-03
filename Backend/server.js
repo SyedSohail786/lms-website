@@ -13,10 +13,7 @@ app.use(cors({
 }));
 
 app.use(express.json());
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.path}`);
-  next();
-});
+
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use('/uploads', express.static('public/uploads'));
