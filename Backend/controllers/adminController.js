@@ -9,7 +9,7 @@ exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const existing = await Admin.findOne({ email });
-    if (existing) return res.status(400).json({ message: 'Email already exists' });
+    if (existing) return res.json({ message: 'Email already exists' });
 
     const admin = await Admin.create({ name, email, password });
     const token = generateToken(admin._id, 'admin');

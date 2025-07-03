@@ -24,7 +24,8 @@ const AdminAuth = ({ isRegister }) => {
 
     try {
       if (isRegister) {
-        await api.post('/api/admin/register', form);
+        const res = await api.post('/api/admin/register', form);
+        if (res.data.message == "Email already exists") return toast.error('Email Already exists');
         toast.success('Admin registration successful! Please login.');
         navigate('/admin-login');
       } else {

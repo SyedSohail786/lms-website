@@ -216,18 +216,6 @@ const Enrolled = () => {
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              onClick={() => toggleExpand(enrollment._id)}
-                              className="text-gray-600 hover:text-gray-900 p-1 rounded-full hover:bg-gray-100"
-                            >
-                              {expandedEnrollment === enrollment._id ? (
-                                <FiChevronUp size={18} />
-                              ) : (
-                                <FiChevronDown size={18} />
-                              )}
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
                               onClick={() => handleRemoveEnrollment(enrollment._id)}
                               className="text-red-600 hover:text-red-900 p-1 rounded-full hover:bg-red-100"
                             >
