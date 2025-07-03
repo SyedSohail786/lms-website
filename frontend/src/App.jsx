@@ -15,6 +15,7 @@ import Courses from '../pages/Courses';
 import CourseDetails from '../pages/CourseDetails';
 import Students from '../pages/Admin/Students';
 import Enrolled from './components/Enrolled';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -84,6 +85,7 @@ function App() {
               } />
             </Routes>
           </div>
+          <Footer/>
         </div>
       </Router>
     </AuthProvider>
