@@ -247,6 +247,7 @@ const AdminDashboard = () => {
                     label={({ name, percent }) => 
                       `${name}: ${(percent * 100).toFixed(0)}%`
                     }
+                    className='text-xs sm:text-sm'
                   >
                     {pieChartData.map((entry, index) => (
                       <Cell 
