@@ -48,7 +48,7 @@ exports.loginStudent = async (req, res) => {
   }
 };
 
-exports.logout = (req, res) => {
+exports.logoutStudent = (req, res) => {
   res.clearCookie('sToken', { 
     secure: process.env.NODE_ENV === 'production',
     sameSite: "None",
