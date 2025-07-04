@@ -52,6 +52,10 @@ const CourseDetails = () => {
   try {
     setEnrolling(true);
     const token = Cookies.get('sToken');
+
+    console.log('All cookies:', document.cookie);
+    console.log('Specific cookie:', Cookies.get('sToken'));
+    console.log('Cookies with options:', Cookies.get('sToken', { path: '/' }));
     
     if (!token) {
       toast.error('You must be logged in to enroll');
