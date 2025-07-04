@@ -53,7 +53,7 @@ const Navbar = () => {
           {/* Logo/Brand */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            onClick={() => auth.role === "admin" ? navigate("/admin/dashboard" : navigate("/") }
+            onClick={() => auth.role === "admin" ? navigate("/admin/dashboard") : navigate("/") }
             className="flex-shrink-0 flex items-center cursor-pointer"
           >
             <FaGraduationCap className={`h-8 w-8 ${scrolled ? 'text-purple-600' : 'text-white'}`} />
