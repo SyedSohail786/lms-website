@@ -48,26 +48,33 @@ const CourseDetails = () => {
     fetchCourse();
   }, [id, navigate]);
 
-  const handleEnroll = async () => {
-    try {
-      setEnrolling(true);
+ const handleEnroll = async () => {
+  try {
+    setEnrolling(true);
     const token = Cookies.get('sToken');
+    
+    if (!token) {
+      toast.error('You must be logged in to enroll');
+      navigate('/student-login');
+      return;
+    }
 
-      console.log(token)
-      
-      if(!token) {
-        toast.error('You must be logged in to enroll')
-        navigate('/student-login')
-        return
-      }
-      await api.post(`/api/enroll/${id}`);
-      toast.success('Successfully enrolled in the course!');
-      setEnrolling(false);
-      setEnrolled(true);
-    } catch (err) {
+    await api.post(`/api/enroll/${id}`, {}, {
+      withCredentials: true // This ensures cookies are sent
+    });
+    toast.success('Successfully enrolled in the course!');
+    setEnrolled(true);
+  } catch (err) {
+    if (err.response?.status === 401) {
+      toast.error('Session expired. Please login again');
+      navigate('/student-login');
+    } else {
       toast.error(err.response?.data?.message || 'Failed to enroll');
     }
-  };
+  } finally {
+    setEnrolling(false);
+  }
+};
   if (loading) return <LoadingSpinner />;
   if (!course) return <div className="text-center py-12 text-base sm:text-lg">Course not found</div>;
 
