@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import { motion } from 'framer-motion';
 import LoadingSpinner from '../src/components/LoadingSpinner';
 import Cookies from 'js-cookie';
+import { useAuth } from '../context/AuthContext';
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -18,6 +19,8 @@ const CourseDetails = () => {
   const [enrolled, setEnrolled] = useState(false);
   const baseurl = import.meta.env.VITE_API_BASE_URL;
   const [enrolling, setEnrolling] = useState(false);
+  const { auth } = useAuth();
+
   useEffect(() => {
     const fetchCourse = async () => {
       try {
@@ -51,20 +54,15 @@ const CourseDetails = () => {
  const handleEnroll = async () => {
   try {
     setEnrolling(true);
-    const token = Cookies.get('sToken');
-
-    console.log('All cookies:', document.cookie);
-    console.log('Specific cookie:', Cookies.get('sToken'));
-    console.log('Cookies with options:', Cookies.get('sToken', { path: '/' }));
     
-    if (!token) {
+    if (auth.role === "guest") {
       toast.error('You must be logged in to enroll');
       navigate('/student-login');
       return;
     }
 
     await api.post(`/api/enroll/${id}`, {}, {
-      withCredentials: true // This ensures cookies are sent
+      withCredentials: true 
     });
     toast.success('Successfully enrolled in the course!');
     setEnrolled(true);
