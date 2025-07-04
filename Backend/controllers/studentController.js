@@ -16,7 +16,7 @@ exports.registerStudent = async (req, res) => {
     const token = generateToken(student._id, 'student');
 
     res.cookie('sToken', token, { 
-      // httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000 // 1 day
@@ -38,7 +38,7 @@ exports.loginStudent = async (req, res) => {
     const token = generateToken(student._id, 'student');
 
     res.cookie('sToken', token, { 
-      // httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000 // 1 day
