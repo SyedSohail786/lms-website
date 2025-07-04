@@ -4,6 +4,7 @@ import SubjectList from '../../src/components/Subjects/SubjectList';
 import LoadingSpinner from '../../src/components/LoadingSpinner';
 import { motion } from 'framer-motion';
 import Select from 'react-select'; // Import react-select
+import { FaBook } from "react-icons/fa6";
 
 const AdminSubjects = () => {
   const [courses, setCourses] = useState([]);
@@ -95,7 +96,7 @@ const AdminSubjects = () => {
             className="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center"
           >
             <div className="mx-auto h-12 w-12 sm:h-16 sm:w-16 flex items-center justify-center rounded-full bg-indigo-100 mb-3 sm:mb-4">
-              <FaUserGraduate className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-600" />
+              <FaBook className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-600" />
             </div>
             <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1">
            No subjects found
