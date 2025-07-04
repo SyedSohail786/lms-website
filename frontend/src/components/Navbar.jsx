@@ -45,14 +45,7 @@ const Navbar = () => {
     ]
   };
 
-  const redirectToHome = () =>{
-    if(auth.role === "admin"){
-      navigate("/admin/dashboard") 
-    }else{
-      navigate("/")
-    }
-    
-  }
+  
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md py-2' : 'bg-gradient-to-r from-purple-600 to-purple-700 py-1'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -60,7 +53,7 @@ const Navbar = () => {
           {/* Logo/Brand */}
           <motion.div
             whileHover={{ scale: 1.05 }}
-            onClick={() => redirectToHome }
+            onClick={() => auth.role === "admin" ? navigate("/admin/dashboard" : navigate("/") }
             className="flex-shrink-0 flex items-center cursor-pointer"
           >
             <FaGraduationCap className={`h-8 w-8 ${scrolled ? 'text-purple-600' : 'text-white'}`} />
