@@ -48,8 +48,12 @@ exports.loginStudent = async (req, res) => {
   }
 };
 
-exports.logoutStudent = (req, res) => {
-  res.clearCookie('sToken').json({ message: 'Logged out' });
+exports.logout = (req, res) => {
+  res.clearCookie('sToken', { 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: "None",
+    path: '/'
+  }).json({ message: 'Logged out' });
 };
 
 exports.getStudentSubjects = async (req, res) => {
