@@ -46,8 +46,12 @@ const Navbar = () => {
   };
 
   const redirectToHome = () =>{
-    if(auth.role === "admin") return navigate("/admin/dashboard") 
-    navigate("/")
+    if(auth.role === "admin"){
+      navigate("/admin/dashboard") 
+    }else{
+      navigate("/")
+    }
+    
   }
   return (
     <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md py-2' : 'bg-gradient-to-r from-purple-600 to-purple-700 py-1'}`}>
