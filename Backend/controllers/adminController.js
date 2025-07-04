@@ -48,7 +48,11 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  res.clearCookie('aToken').json({ message: 'Logged out' });
+  res.clearCookie('aToken', { 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: "None",
+    path: '/'
+  }).json({ message: 'Logged out' });
 };
 
 exports.getAdmin = (req, res) => {
