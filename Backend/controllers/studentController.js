@@ -18,7 +18,7 @@ exports.registerStudent = async (req, res) => {
     res.cookie('sToken', token, { 
       // httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     }).json({ success: true });
   } catch (err) {
@@ -40,7 +40,7 @@ exports.loginStudent = async (req, res) => {
     res.cookie('sToken', token, { 
       // httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: "None",
       maxAge: 24 * 60 * 60 * 1000 // 1 day
     }).json({ success: true });
   } catch (err) {
