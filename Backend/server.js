@@ -29,7 +29,7 @@ app.use('/api/subjects', require('./routes/subjectRoutes'));
 app.use('/api/students', require('./routes/studentRoutes'));
 app.use('/api/tests', require('./routes/testRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
-app.use('/api', require('./routes/enrollmentRoutes');
+app.use('/api', require('./routes/enrollmentRoutes'));
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI, {
