@@ -56,7 +56,7 @@ const AdminSubjects = () => {
               Add courses to start managing subjects
             </p>
             <button
-              onClick={() => navigate('/admin/courses/new')}
+              onClick={() => navigate('/admin/courses')}
               className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <FaPlus className="-ml-1 mr-2 h-4 w-4" />
