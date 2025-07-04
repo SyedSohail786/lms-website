@@ -51,7 +51,7 @@ const CourseDetails = () => {
   const handleEnroll = async () => {
     try {
       setEnrolling(true);
-    const token = await Cookies.get('sToken');
+    const token = Cookies.get('sToken');
 
       console.log(token)
       
