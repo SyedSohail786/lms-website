@@ -60,7 +60,16 @@ export const AuthProvider = ({ children }) => {
     try {
       const endpoint = auth.role === 'admin' ? '/api/admin/logout' : '/api/students/logout';
       await api.get(endpoint);
-      auth.role === 'admin' ? Cookies.remove('aToken') : Cookies.remove('sToken');
+      Cookies.remove('aToken', { 
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'None',
+      path: '/' 
+    });
+    Cookies.remove('sToken', { 
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'None',
+      path: '/' 
+    });
       setAuth({ 
         status: 'guest', 
         role: null, 
