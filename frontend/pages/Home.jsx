@@ -4,8 +4,10 @@ import { FaChalkboardTeacher, FaBook, FaUserGraduate, FaChartLine, FaMobileAlt, 
 import { FiArrowRight } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import Cookies from 'js-cookie';
+import { useAuth } from '../context/AuthContext';
 
 const LandingPage = () => {
+  const { auth } = useAuth();
   const [stats, setStats] = useState({
     courses: 0,
     students: 0,
@@ -22,7 +24,7 @@ const LandingPage = () => {
       });
     }, 1000);
   }, []);
-  const token = Cookies.get('sToken');
+  
   return (
     <div className="font-sans">
       {/* Hero Section */}
@@ -42,16 +44,16 @@ const LandingPage = () => {
           
               <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <Link
-              to={`${token? "/courses":"/student-register" }`}
+              to={`${auth.role === "student" ? "/courses":"/student-register" }`}
               className="bg-white text-blue-600 font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-50 transition duration-300 flex items-center justify-center"
             >
               Get Started <FiArrowRight className="ml-2" />
             </Link>
             <Link
-              to={`${token? "/student/subjects":"/student-login" }`}
+              to={`${auth.role === "student"? "/student/subjects":"/student-login" }`}
               className="border-2 border-white text-white font-semibold px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-white hover:bg-opacity-10 transition duration-300"
             >
-              {token? "Mock Test" : "Login"}
+              {auth.role === "student"? "Mock Test" : "Login"}
             </Link>
           </div>
             
@@ -138,10 +140,10 @@ const LandingPage = () => {
             Join thousands of students who are already advancing their careers with our courses.
           </p>
           <Link
-           to={`${token? "/courses":"/student-register" }`}
+           to={`${auth.role === "student"? "/courses":"/student-register" }`}
             className="bg-blue-600 text-white font-semibold px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition duration-300 inline-block"
           >
-           {token? "Explore Courses" : "Sign Up For Free"} 
+           {auth.role === "student"? "Explore Courses" : "Sign Up For Free"} 
           </Link>
         </div>
       </section>
