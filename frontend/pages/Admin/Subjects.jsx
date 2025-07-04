@@ -45,7 +45,7 @@ const AdminSubjects = () => {
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h1 className="text-3xl font-bold text-gray-900">Manage Subjects</h1>
-          {courses.length > 0 && (
+          {courses.length > 0 ? (
             <Select
               options={courseOptions}
               value={courseOptions.find(option => option.value === selectedCourse)}
@@ -88,7 +88,24 @@ const AdminSubjects = () => {
                 IndicatorSeparator: () => null,
               }}
             />
-          )}
+          ): (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-white rounded-xl shadow-sm p-6 sm:p-8 text-center"
+          >
+            <div className="mx-auto h-12 w-12 sm:h-16 sm:w-16 flex items-center justify-center rounded-full bg-indigo-100 mb-3 sm:mb-4">
+              <FaUserGraduate className="h-6 w-6 sm:h-8 sm:w-8 text-indigo-600" />
+            </div>
+            <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-1">
+           No subjects found
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-500">
+               Add courses to get started
+            </p>
+          </motion.div>
+        )
+        }
         </div>
 
         {selectedCourse && <SubjectList courseId={selectedCourse} />}
