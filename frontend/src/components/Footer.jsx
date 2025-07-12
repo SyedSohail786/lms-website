@@ -127,8 +127,8 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-purple-500 text-center text-purple-200 text-sm">
-          <p>&copy; {new Date().getFullYear()} EduExam. All rights reserved.</p>
-           <p>Developed by Syed Sohail</p>
+          <p>&copy; {new Date().getFullYear()} Digisnare. All rights reserved.</p>
+{/*            <p>Developed by Syed Sohail</p> */}
           <div className="mt-2 flex justify-center space-x-6">
             <a className="hover:text-white">
               Privacy Policy
